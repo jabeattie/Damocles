@@ -35,7 +35,7 @@ public struct Container: Resolver {
     /// Register a factory to generate a new instance of the provided class on each invocation
     /// - Parameter factory: A closure that has access to all previously registered types that returns the generic ServiceType
     public func register<ServiceType>(_ factory: @escaping (Resolver) -> ServiceType) -> Container {
-        assert(!factories.contains(where: { $0.supports(ServiceType.self) }))
+        guard !factories.contains(where: { $0.supports(ServiceType.self) }) else { return }
 
         let newFactory = BasicServiceFactory<ServiceType>(factory: { resolver in
             factory(resolver)
@@ -46,7 +46,7 @@ public struct Container: Resolver {
     /// Register a factory to generate a new instance of the provided class on each invocation
     /// - Parameter factory: A closure that has access to all previously registered types that returns the generic ServiceType
     public func register<ServiceType>(_ type: ServiceType.Type, _ factory: @escaping (Resolver) -> ServiceType) -> Container {
-        assert(!factories.contains(where: { $0.supports(type) }))
+        guard !factories.contains(where: { $0.supports(type) }) else { return }
 
         let newFactory = BasicServiceFactory<ServiceType>(factory: { resolver in
             factory(resolver)
