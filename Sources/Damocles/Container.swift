@@ -58,7 +58,7 @@ public struct Container: Resolver {
     /// Generic resolver that will return the type using either an instance or factory. Will crash if the type has not been registered
     public func resolve<ServiceType>() -> ServiceType {
         guard let factory = factories.first(where: { $0.supports(ServiceType.self) }) else {
-            fatalError("No suitable factory found")
+            fatalError("No suitable factory found for \(ServiceType.self)")
         }
         return factory.resolve(self)
     }
@@ -66,7 +66,7 @@ public struct Container: Resolver {
     /// Returns a closure that can be call to return the generic type.
     public func factory<ServiceType>() -> () -> ServiceType {
         guard let factory = factories.first(where: { $0.supports(ServiceType.self) }) else {
-            fatalError("No suitable factory found")
+            fatalError("No suitable factory found for \(ServiceType.self)")
         }
 
         return { factory.resolve(self) }
